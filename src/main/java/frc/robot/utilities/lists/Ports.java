@@ -15,27 +15,35 @@ package frc.robot.utilities.lists;
 public final class Ports {
 
     public static final int
-            // OI
-            XBOX_PORT = 0,
-            LAUNCHPAD_PORT = 1,
-            JOYSTICK_PORT = 2,
 
-            // drivetrain
-            // TODO: Set ports
-            LEFT_DRIVE_1 = 0,
-            LEFT_DRIVE_2 = 0,
-            LEFT_DRIVE_3 = 0,
-            RIGHT_DRIVE_1 = 0,
-            RIGHT_DRIVE_2 = 0,
-            RIGHT_DRIVE_3 = 0,
-            SHIFT_SOLENOID_UP = 0,
-            SHIFT_SOLENOID_DOWN = 0,
+        // OI
+        XBOX_PORT = 0,
+        LAUNCHPAD_PORT = 1,
+        JOYSTICK_PORT = 2,
+    
+        // drivetrain
+        LEFT_DRIVE_2 = 31,
+        LEFT_DRIVE_3 = 32,
+        LEFT_DRIVE_1 = 30,
+    
+        RIGHT_DRIVE_2 = 21,
+        RIGHT_DRIVE_3 = 22,
+        RIGHT_DRIVE_1 = 20,
 
-            // LEDs
-            LED_PORT = 0,
-            LED_LENGTH = 0,
+        SHIFT_SOLENOID_UP = 0,
+        SHIFT_SOLENOID_DOWN = 4,
 
-            // pneumatics
-            PRESSURE_SENSOR = 0,
-            PCM_1 = 0;
+        // intake
+        INTAKE_ARM_SPIN = 62,
+        INTAKE_ARM_PIVOT = 61,
+        INTAKE_LOCK = 2,
+        UPPER_LIMIT = 1,
+
+        // LEDs
+        LED_PORT = 0,
+        LED_LENGTH = 500,
+
+        // pneumatics
+        PRESSURE_SENSOR = 0,
+        PCM_1 = 16;
 }

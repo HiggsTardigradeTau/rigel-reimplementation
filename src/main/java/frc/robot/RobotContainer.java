@@ -8,12 +8,12 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import frc.robot.commands.drivetrain.ArcadeDrive;
 import frc.robot.devices.LEDs.LEDCall;
 import frc.robot.devices.LEDs.LEDRange;
@@ -26,6 +26,8 @@ import frc.robot.oi.drivers.JoystickDriver;
 import frc.robot.oi.drivers.LaunchpadDriver;
 import frc.robot.oi.drivers.ShuffleboardDriver;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Pneumatics;
+import frc.robot.subsystems.Shifter;
 import frc.robot.utilities.ChangeRateLimiter;
 import frc.robot.utilities.lists.Colors;
 import frc.robot.utilities.lists.LEDPriorities;
@@ -48,6 +50,9 @@ public class RobotContainer {
 
     private final Drivetrain drivetrain;
 
+    private Shifter shifter;
+    private Pneumatics pneumatics;
+
     private final Lemonlight targetingLimelight, ballDetectionLimelight;
     private final PDP pdp;
     private final AHRS gyro;
@@ -66,6 +71,9 @@ public class RobotContainer {
         launchpad = new LaunchpadDriver(Ports.LAUNCHPAD_PORT);
         joystick = new JoystickDriver(Ports.JOYSTICK_PORT);
         pdp = new PDP();
+
+        pneumatics = new Pneumatics(ShuffleboardDriver.pressure);
+        shifter = new Shifter();
 
         new LEDCall("disabled", LEDPriorities.ON, LEDRange.All).solid(Colors.DIM_GREEN).activate();
         ShuffleboardDriver.statusDisplay.addStatus(
@@ -153,6 +161,17 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
+        controller1.leftBumper.toggleWhenPressed(new StartEndCommand(
+            () -> {
+                shifter.lowGear();
+                launchpad.bigLEDRed.set(true);
+                launchpad.bigLEDGreen.set(false);
+            }, () -> {
+                shifter.highGear();
+                launchpad.bigLEDRed.set(false);
+                launchpad.bigLEDGreen.set(true);
+            }, shifter
+        ));
     }
 
     /**
