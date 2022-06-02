@@ -101,7 +101,6 @@ public class Drivetrain extends SubsystemBase {
     public static DifferentialDriveVoltageConstraint LowVoltageConstraint =
         new DifferentialDriveVoltageConstraint(LowFeedFoward, DriveKinimatics, MAX_OUTPUT_VOLTAGE);
 
-    private final Solenoid shift;
 
     private boolean oldShift;
 
@@ -122,8 +121,6 @@ public class Drivetrain extends SubsystemBase {
     public Drivetrain(AHRS gyro) {
 
         this.gyro = gyro;
-
-        shift = new Solenoid(Ports.PCM_1, PneumaticsModuleType.REVPH, Ports.SHIFT_SOLENOID_UP);
 
         odometryTime.reset();
         odometryTime.start();
@@ -195,26 +192,6 @@ public class Drivetrain extends SubsystemBase {
 
     }
 
-
-    /**
-     * Shifts the robot into high gear.
-     */
-    public void highGear() {
-        lowShift.cancel();
-        oldShift = true;
-        updateDistanceAcum();
-        shift.set(true);
-    }
-
-    /**
-     * Shifts the robot into low gear.
-     */
-    public void lowGear() {
-        lowShift.activate();
-        oldShift = false;
-        updateDistanceAcum();
-        shift.set(false);
-    }
 
     /**
      * Updateds the distace acumulator.

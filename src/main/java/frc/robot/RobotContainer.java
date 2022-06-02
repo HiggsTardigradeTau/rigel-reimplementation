@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import frc.robot.commands.drivetrain.ArcadeDrive;
+import frc.robot.commands.intake.DefaultIntake;
 import frc.robot.devices.LEDs.LEDCall;
 import frc.robot.devices.LEDs.LEDRange;
 import frc.robot.devices.LEDs.LEDs;
@@ -26,6 +27,7 @@ import frc.robot.oi.drivers.JoystickDriver;
 import frc.robot.oi.drivers.LaunchpadDriver;
 import frc.robot.oi.drivers.ShuffleboardDriver;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Pneumatics;
 import frc.robot.subsystems.Shifter;
 import frc.robot.utilities.ChangeRateLimiter;
@@ -49,6 +51,7 @@ public class RobotContainer {
     private final JoystickDriver joystick;
 
     private final Drivetrain drivetrain;
+    private final Intake intake;
 
     private Shifter shifter;
     private Pneumatics pneumatics;
@@ -85,6 +88,7 @@ public class RobotContainer {
         ballDetectionLimelight = new Lemonlight("balldetect");
 
         drivetrain = new Drivetrain(gyro);
+        intake = new Intake(pdp);
 
         autoInit = new SequentialCommandGroup(
                 new InstantCommand(
@@ -93,7 +97,6 @@ public class RobotContainer {
                             "robot in auto",
                             Colors.TEAM,
                             StatusPriorities.ENABLED)),
-                new InstantCommand(drivetrain::highGear),
                 new InstantCommand(() -> {
                     launchpad.bigLEDRed.set(false);
                     launchpad.bigLEDGreen.set(true);
@@ -129,7 +132,7 @@ public class RobotContainer {
                             Colors.TEAM,
                             StatusPriorities.ENABLED)),
                 new InstantCommand(() -> joystick.reEnableJoystickCalibrationCheck()),
-                new InstantCommand(drivetrain::highGear),
+                new InstantCommand(shifter::highGear),
                 new InstantCommand(() -> targetingLimelight.setLEDMode(LEDModes.FORCE_OFF)),
                 new InstantCommand(() -> ballDetectionLimelight.setLEDMode(LEDModes.FORCE_OFF)),
                 new InstantCommand(() -> {
@@ -152,6 +155,7 @@ public class RobotContainer {
             controller1.rightTrigger,
             controller1.leftTrigger,
             controller1.leftX));
+        intake.setDefaultCommand(new DefaultIntake(intake, joystick.axisY));
     }
 
     /**

@@ -122,9 +122,9 @@ public class ArcadeDrive extends CommandBase {
         avgSpeed.update(Math.abs(drivetrain.getRightRPM()) + Math.abs(drivetrain.getLeftRPM()));
 
         //shifts into low gear if drivetrain stalled
-        if ((avgPower.getAverage() > .5) && avgSpeed.getAverage() < 15) {
-            drivetrain.lowGear();
-        }
+        // if ((avgPower.getAverage() > .5) && avgSpeed.getAverage() < 15) {
+            // shifter.lowGear();
+        // }
 
         double turn = Math.pow(turnAxis.get(), 3);
 
